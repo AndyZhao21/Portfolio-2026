@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Andy Zhao | Calm Nostalgia</title>
+  <style>
+    :root {
+      /* Base Day-to-Night Palette */
+      --sky-day: #a2c5d6;     
+      --sky-sunset: #f0b8a1;  
+      --sky-dusk: #6e7f9e;    
+      --sky-evening: #1c315f; 
+      --deep-background: #020305; 
+      
+      /* Pure Night Palette (Sharyap Inspired) */
+      --night-dusk: #0f172a;
+      --night-void: #020305;
+
+      --steel-blue: #8B9EB2;      
+      --accent-yellow: #F5E8A6;   
+      --off-white: #FEFEFE;       
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Helvetica', Arial, sans-serif;
+      background: linear-gradient(
+        to bottom,
+        var(--sky-day) 0%,
+        var(--sky-sunset) 15%,
+        var(--sky-dusk) 35%,
+        var(--sky-evening) 65%,
+        var(--deep-background) 100%
+      );
+      color: var(--off-white);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+      /* Smooth color transitions for elements changing in night mode */
+      transition: color 0.8s ease;
+    }
+
+    /* --- Background Layers --- */
+    
+    /* Dedicated smooth-fading night background */
+    .night-bg {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: linear-gradient(to bottom, var(--night-dusk) 0%, var(--night-void) 100%);
+      z-index: -3;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Toggled State */
+    body.night-mode .night-bg {
+      opacity: 1;
+    }
+
+    .noise-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.04;
+      background-image: url('data:image/svg+xml;utf8,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)"/%3E%3C/svg%3E');
+    }
+
+    /* Fixed Image at Top */
+    .hero-image-wrapper {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 90vh;
+      overflow: hidden;
+      z-index: -1;
+    }
+
+    .hero-image {
+      width: 100%; height: 100%; object-fit: cover;
+      opacity: 0.85; 
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 30%, rgba(0,0,0,0) 95%);
+      -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 30%, rgba(0,0,0,0) 95%);
+      transition: opacity 1.2s ease, filter 1.2s ease;
+    }
+
+    /* Toggled State: Darken and desaturate the hero image for night mode */
+    body.night-mode .hero-image {
+      opacity: 0.2;
+      filter: grayscale(60%) brightness(0.6);
+    }
+
+    .star-field {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      z-index: -2;
+      pointer-events: none;
+      opacity: 0; 
+      will-change: opacity;
+      transition: opacity 0.5s ease;
+    }
+
+    /* Toggled State: Force stars to show */
+    body.night-mode .star-field {
+      opacity: 1 !important;
+    }
+
+    .star {
+      position: absolute;
+      background-color: var(--accent-yellow);
+      border-radius: 50%;
+      box-shadow: 0 0 4px 1px rgba(245, 232, 166, 0.15);
+      animation: twinkle linear infinite alternate;
+    }
+
+    @keyframes twinkle {
+      0% { opacity: 0.15; transform: scale(0.9); }
+      100% { opacity: 0.6; transform: scale(1.1); box-shadow: 0 0 8px 2px rgba(245, 232, 166, 0.3); }
+    }
+
+    /* --- Layout & Typography --- */
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 5%;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 40px 0;
+      font-size: 0.9rem;
+      letter-spacing: 1px;
+      position: relative;
+      z-index: 100;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+
+    /* Group Logo and Button together */
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .logo a { 
+      color: var(--off-white); 
+      text-decoration: none; 
+      font-weight: 500;
+    }
+
+    /* Night Mode Toggle Button */
+    .theme-toggle {
+      background: transparent;
+      border: 1px solid rgba(254, 254, 254, 0.3);
+      color: var(--accent-yellow);
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      backdrop-filter: blur(4px);
+    }
+
+    .theme-toggle:hover {
+      background: rgba(245, 232, 166, 0.1);
+      border-color: var(--accent-yellow);
+      transform: scale(1.05) rotate(15deg);
+      box-shadow: 0 0 10px rgba(245, 232, 166, 0.2);
+    }
+
+    body.night-mode .theme-toggle {
+      background: var(--accent-yellow);
+      color: var(--deep-background);
+      border-color: var(--accent-yellow);
+      box-shadow: 0 0 15px rgba(245, 232, 166, 0.4);
+    }
+
+    .nav-links a { 
+      margin-left: 40px; 
+      text-transform: lowercase; 
+      color: var(--off-white); 
+      text-decoration: none;
+      transition: opacity 0.3s ease;
+    }
+    .nav-links a:hover { opacity: 0.6; }
+
+    /* --- Hero Section --- */
+    .hero {
+      height: 80vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+    }
+
+    .hero-text h1 {
+      font-weight: 300;
+      font-size: clamp(3rem, 6vw, 5rem);
+      line-height: 1.1;
+      letter-spacing: -1px;
+      margin-bottom: 20px;
+      text-shadow: 0 4px 15px rgba(0,0,0,0.15); 
+    }
+
+    .hero-text p {
+      font-size: 1.1rem;
+      max-width: 500px;
+      color: var(--off-white);
+      opacity: 0.9;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+
+    /* --- Selected Works Section --- */
+    .works {
+      padding: 10vh 0;
+      position: relative;
+      z-index: 10;
+    }
+
+    .works-header {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 60px;
+      color: var(--accent-yellow);
+    }
+
+    .project-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+      margin-bottom: 120px;
+    }
+
+    .project-row:nth-child(even) {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .project-row:nth-child(even) .image-wrapper {
+      order: 2;
+    }
+
+    .image-wrapper {
+      display: block;
+      width: 100%;
+      height: 65vh;
+      overflow: hidden;
+      border-radius: 4px;
+      position: relative;
+    }
+
+    .parallax-img {
+      width: 100%;
+      height: 120%; 
+      object-fit: cover;
+      position: absolute;
+      top: -10%;
+      left: 0;
+      will-change: transform;
+      transition: transform 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .image-wrapper:hover .parallax-img {
+      transform: scale(1.03) !important; 
+      transition: transform 0.8s ease;
+    }
+
+    .project-info {
+      padding: 0 40px;
+    }
+
+    .micro-text {
+      display: block;
+      font-size: 0.8rem;
+      letter-spacing: 1px;
+      margin-bottom: 20px;
+      color: var(--steel-blue);
+    }
+
+    .project-info h2 {
+      font-size: 2.5rem;
+      font-weight: 500;
+      line-height: 1.1;
+      margin-bottom: 20px;
+    }
+
+    .project-info p {
+      font-size: 1rem;
+      color: var(--steel-blue);
+      margin-bottom: 30px;
+      max-width: 400px;
+    }
+
+    .project-info a {
+      font-size: 0.9rem;
+      color: var(--accent-yellow);
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      border-bottom: 1px solid transparent;
+      transition: border-bottom 0.3s ease;
+    }
+
+    .project-info a:hover {
+      border-bottom: 1px solid var(--accent-yellow);
+    }
+
+    footer {
+      padding: 60px 0;
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--steel-blue);
+      border-top: 1px solid rgba(254, 254, 254, 0.05);
+    }
+
+    @media (max-width: 900px) {
+      .project-row, .project-row:nth-child(even) {
+        grid-template-columns: 1fr;
+        gap: 30px;
+        margin-bottom: 80px;
+      }
+      .project-row:nth-child(even) .image-wrapper { order: 1; }
+      .project-info { padding: 0; }
+      .image-wrapper { height: 50vh; }
+    }
+  </style>
+</head>
+<body class="night-mode">
+
+  <div class="night-bg"></div>
+
+  <div class="hero-image-wrapper">
+    <img src="cloudbottom.png" alt="Sky" class="hero-image">
+  </div>
+
+  <div class="star-field">
+    <div class="star" style="top: 15%; left: 20%; width: 3px; height: 3px; animation-duration: 3s;"></div>
+    <div class="star" style="top: 25%; left: 70%; width: 2px; height: 2px; animation-duration: 4s;"></div>
+    <div class="star" style="top: 40%; left: 10%; width: 4px; height: 4px; animation-duration: 5s; animation-delay: 1s;"></div>
+    <div class="star" style="top: 65%; left: 85%; width: 2px; height: 2px; animation-duration: 2.5s;"></div>
+    <div class="star" style="top: 80%; left: 40%; width: 3px; height: 3px; animation-duration: 4.5s; animation-delay: 2s;"></div>
+    <div class="star" style="top: 10%; left: 90%; width: 2px; height: 2px; animation-duration: 3.5s;"></div>
+    <div class="star" style="top: 55%; left: 50%; width: 3px; height: 3px; animation-duration: 6s;"></div>
+  </div>
+
+  <div class="noise-overlay"></div>
+
+  <div class="container">
+    <nav>
+      <div class="nav-brand">
+        <div class="logo"><a href="index.html">andy zhao</a></div>
+        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Night Mode">✧</button>
+      </div>
+      <div class="nav-links">
+        <a href="#work">work</a>
+        <a href="#about">about</a>
+      </div>
+    </nav>
+
+    <header class="hero">
+      <div class="hero-text">
+        <h1>Andy Zhao</h1>
+        <p>A portfolio exploring immersive, narrative-driven design experiences.</p>
+      </div>
+    </header>
+
+    <main id="work">
+      <section class="works">
+        <div class="works-header">Selected Works</div>
+        
+        <article class="project-row">
+          <a href="zb1.html" class="image-wrapper">
+            <img src="ZB1 tour poster 1.jpg" alt="ZEROBASEONE Tour" class="parallax-img">
+          </a>
+          <div class="project-info">
+            <span class="micro-text">// VOL. 01 — [2026]</span>
+            <h2>ZEROBASEONE<br>HERE & NOW</h2>
+            <p>Visual direction, promotional assets, and merchandise design for ZB1's first North American tour.</p>
+            <a href="zb1.html">Explore Case Study</a>
+          </div>
+        </article>
+
+        <article class="project-row">
+          <a href="soluna.html" class="image-wrapper">
+            <img src="soluna.png" alt="Soluna Alpine" class="parallax-img">
+          </a>
+          <div class="project-info">
+            <span class="micro-text">// VOL. 02 — [2026]</span>
+            <h2>SOLUNA<br>ALPINE</h2>
+            <p>Brand identity rooted in the tranquility of high-altitude landscapes and deep snow.</p>
+            <a href="soluna.html">Explore Case Study</a>
+          </div>
+        </article>
+
+      </section>
+    </main>
+
+    <footer>
+      © 2026 Andy Zhao 
+    </footer>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      // 1. Theme Toggle Logic
+      const themeToggle = document.getElementById('theme-toggle');
+      // Set initial state to true!
+      let isNightMode = true;
+
+      themeToggle.addEventListener('click', () => {
+        isNightMode = !isNightMode;
+        document.body.classList.toggle('night-mode');
+        // Update button icon dynamically
+        themeToggle.innerHTML = isNightMode ? '✧' : '✦';
+        
+        // If night mode is turned off, trigger scroll event to reset star fading
+        if (!isNightMode) {
+          window.dispatchEvent(new Event('scroll'));
+        }
+      });
+
+      // 2. Star Fade-In Day/Night Scroll Effect (Ignored if Night Mode is active via CSS !important)
+      const starField = document.querySelector('.star-field');
+      
+      window.addEventListener('scroll', () => {
+        if (isNightMode) return; // Let CSS handle it if manually toggled
+        
+        const scrollY = window.scrollY;
+        const maxScroll = document.body.scrollHeight - window.innerHeight;
+        const scrollPercent = maxScroll > 0 ? scrollY / maxScroll : 0;
+        
+        let starOpacity = (scrollPercent - 0.25) * 3.33; 
+        starOpacity = Math.max(0, Math.min(starOpacity, 1)); 
+        
+        starField.style.opacity = starOpacity;
+      });
+
+      // 3. Parallax Script for project images
+      const parallaxImages = document.querySelectorAll(".parallax-img");
+
+      const updateParallax = () => {
+        parallaxImages.forEach(img => {
+          const wrapper = img.parentElement;
+          const rect = wrapper.getBoundingClientRect();
+          const centerOffset = (window.innerHeight / 2) - (rect.top + rect.height / 2);
+          const yPos = centerOffset * 0.15; 
+          img.style.transform = `translateY(${yPos}px)`;
+        });
+      };
+
+      window.addEventListener("scroll", updateParallax);
+      window.addEventListener("resize", updateParallax);
+      updateParallax(); 
+    });
+  </script>
+</body>
+</html>
