@@ -52,8 +52,8 @@
       position: absolute;
       background-color: var(--accent-yellow);
       border-radius: 50%;
-      /* Softer base glow */
-      box-shadow: 0 0 4px 1px rgba(245, 232, 166, 0.15);
+      /* Increased the base glow slightly so it's always somewhat visible */
+      box-shadow: 0 0 6px 2px rgba(245, 232, 166, 0.3);
       animation: twinkle linear infinite alternate;
     }
 
@@ -142,7 +142,62 @@
       opacity: 0; animation-delay: calc(0.1s * var(--delay, 1));
       will-change: transform, opacity;
     }
+    .poster-description {
+    grid-column: span 6;
+    padding: 15px 10px 40px 10px;
+    text-align: center; 
+    animation: float-down 2s ease-out forwards;
+    opacity: 0;
+    animation-delay: calc(0.1s * var(--delay, 1));
+  }
+   .intro-text {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1rem;
+  padding-bottom: 15px; /* Adds space between the text and the line */
+  margin-bottom: 40px;
+  color: var(--zb1-blue);
+   }
 
+  .poster-description h3 {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 700;
+    color: var(--zb1-blue);
+    font-size: 1.1rem;
+    margin-bottom: 8px;
+  }
+
+  .poster-description p {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 400;
+    font-size: 0.85rem;
+    color: var(--off-white);
+    opacity: 0.8;
+    line-height: 1.5;
+  }
+
+  .section-label {
+    grid-column: span 12;
+    text-align: center;
+    margin: 60px 0 20px 0;
+    border-top: 1px solid rgba(202, 227, 247, 0.1);
+    padding-top: 40px;
+    animation: float-down 2s ease-out forwards;
+    opacity: 0;
+  }
+
+  /* Using the Orbitron font for the main section divider to match your main title */
+  .section-label h2 {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 700;
+    color: var(--accent-yellow);
+    letter-spacing: 4px;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+  }
+  
+  .section-label p {
+    font-family: 'Orbitron', sans-serif;
+  }
     .img-large { grid-column: span 12; aspect-ratio: 16/9; }
     .img-half { grid-column: span 6; aspect-ratio: 1/1; } 
     .img-third { grid-column: span 4; aspect-ratio: 3/4; }
@@ -213,6 +268,8 @@
       .img-half, .img-third { grid-column: span 12; }
       .pos-1, .pos-2, .pos-3, .pos-4 { grid-column: span 12; top: 0; margin-bottom: 40px; }
     }
+
+
   </style>
 </head>
 <body>
@@ -244,8 +301,14 @@
         
         <div class="zb1-branding">
           <h1>ZEROBASEONE<br>HERE & NOW</h1>
-          <p class="subtitle">USA World Tour 2026. Visual Direction, Poster Design, & Promotional Assets developed entirely around a futuristic, light-rose tech aesthetic.</p>
-          
+          <p class="subtitle">USA World Tour 2026. Visual Direction, Poster Design, & Promotional Assets 
+          </p>
+          <p class="intro-text">
+  In this project, I explored concept branding, and visual direction for ZEROBASEONE's 1st USA World Tour.<br> 
+  This project reflects the type of creative direction that I want to possibly pursue in the future within <br> 
+  the entertainment and music industry.
+</p>
+
           <div class="tour-dates">
             <div class="date-item">
               <span class="date">MAR 06-07</span>
@@ -292,9 +355,20 @@
       </section>
 
       <section class="image-grid">
-        
-        <img src="ZB1 tour poster 1.jpg" alt="Tour Poster 1" class="standard img-half" style="--delay: 1;">
-        <img src="ZB1 tour poster 2.jpg" alt="Tour Poster 2" class="standard img-half" style="--delay: 2;">
+  
+  <img src="ZB1 tour poster 2.jpg" alt="Tour Poster 2" class="standard img-half" style="--delay: 1;">
+  <img src="ZB1 tour poster 1.jpg" alt="Tour Poster 1" class="standard img-half" style="--delay: 2;">
+
+  <div class="poster-description" style="--delay: 1.5;">
+    <h3>Primary Visual</h3>
+    <p>The main tour visual designed for digital social platforms and outdoor terminal displays.</p>
+  </div>
+    
+
+  <div class="poster-description" style="--delay: 2.5;">
+    <h3>Secondary Visual</h3>
+    <p>This is an information based poster utilizing typography showing the details of the tour-dates.</p>
+  </div>
         
         <div class="scatter-wrapper pos-1" style="--delay: 3;">
           <img src="Mockups/shirtnobgmockup.png" alt="Tour Shirt">
