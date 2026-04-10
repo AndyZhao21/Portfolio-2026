@@ -110,13 +110,23 @@
       position: absolute;
       background-color: var(--accent-yellow);
       border-radius: 50%;
-      box-shadow: 0 0 4px 1px rgba(245, 232, 166, 0.15);
+      /* Increased the base glow slightly so it's always somewhat visible */
+      box-shadow: 0 0 6px 2px rgba(245, 232, 166, 0.3);
       animation: twinkle linear infinite alternate;
     }
 
     @keyframes twinkle {
-      0% { opacity: 0.15; transform: scale(0.9); }
-      100% { opacity: 0.6; transform: scale(1.1); box-shadow: 0 0 8px 2px rgba(245, 232, 166, 0.3); }
+      /* Bumped the lowest opacity slightly so they don't disappear entirely */
+      0% { 
+        opacity: 0.3; 
+        transform: scale(0.9); 
+      }
+      /* Pushed max opacity to 1.0 and intensified the glow radius and color */
+      100% { 
+        opacity: 1; 
+        transform: scale(1.15); 
+        box-shadow: 0 0 16px 4px rgba(245, 232, 166, 0.7); 
+      }
     }
 
     /* --- Layout & Typography --- */
@@ -321,6 +331,26 @@
       border-top: 1px solid rgba(254, 254, 254, 0.05);
     }
 
+/* --- Soluna Alpine Day/Night Image Toggle --- */
+    .soluna-day, .soluna-night {
+      /* Adds opacity to the existing transform transitions */
+      transition: opacity 0.8s ease, transform 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    /* By default (Day Mode), hide the night image */
+    .soluna-night {
+      opacity: 0; 
+    }
+
+    /* When Night Mode is active, show the night image and hide the day image */
+    body.night-mode .soluna-night {
+      opacity: 1; 
+    }
+
+    body.night-mode .soluna-day {
+      opacity: 0; 
+    }
+    
     @media (max-width: 900px) {
       .project-row, .project-row:nth-child(even) {
         grid-template-columns: 1fr;
@@ -378,25 +408,27 @@
         
         <article class="project-row">
           <a href="zb1.html" class="image-wrapper">
-            <img src="ZB1 tour poster 1.jpg" alt="ZEROBASEONE Tour" class="parallax-img">
+            <img src="ZB1 tour poster 2.jpg" alt="ZEROBASEONE Tour" class="parallax-img">
           </a>
           <div class="project-info">
             <span class="micro-text">// VOL. 01 — [2026]</span>
             <h2>ZEROBASEONE<br>HERE & NOW</h2>
-            <p>Visual direction, promotional assets, and merchandise design for ZB1's first North American tour.</p>
-            <a href="zb1.html">Explore Case Study</a>
+            <p>Visual direction, promotional assets, and merchandise design for ZB1's first USA tour.</p>
+            <a href="zb1.html">Explore
+            </a>
           </div>
         </article>
 
         <article class="project-row">
           <a href="soluna.html" class="image-wrapper">
-            <img src="soluna.png" alt="Soluna Alpine" class="parallax-img">
+            <img src="Daytime.jpg" alt="Soluna Alpine Day" class="parallax-img soluna-day">
+            <img src="Nighttime.jpg" alt="Soluna Alpine Night" class="parallax-img soluna-night">
           </a>
           <div class="project-info">
             <span class="micro-text">// VOL. 02 — [2026]</span>
             <h2>SOLUNA<br>ALPINE</h2>
             <p>Brand identity rooted in the tranquility of high-altitude landscapes and deep snow.</p>
-            <a href="soluna.html">Explore Case Study</a>
+            <a href="soluna.html">Explore </a>
           </div>
         </article>
 
