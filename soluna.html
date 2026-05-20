@@ -47,7 +47,26 @@
       overflow-x: hidden;
       min-height: 100vh;
     }
+/* Add this to cover the whole page for daytime */
+.day-bg {
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  background: linear-gradient(
+    to bottom,
+    var(--day-1) 0%,
+    var(--day-2) 25%,
+    var(--day-3) 50%,
+    var(--day-4) 75%,
+    var(--day-5) 100%
+  );
+  z-index: -4; /* Must be behind the night-bg */
+  transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
 
+/* Hide the day background when in night mode */
+body.night-mode .day-bg {
+  opacity: 0;
+}
     /* --- Dynamic Night Background --- */
     .night-bg {
       position: fixed;
@@ -191,7 +210,7 @@
       line-height: 1.1; 
       margin-bottom: 20px;
       letter-spacing: 2px;
-      text-transform: uppercase; /* Looks great with Futura */
+      text-transform: uppercase;
       color: var(--off-white);
     }
     
@@ -218,7 +237,7 @@
       display: grid;
       grid-template-columns: repeat(12, 1fr);
       gap: 20px;
-      padding-bottom: 100px;
+      padding-bottom: 40px; /* Reduced to bring bottom up */
     }
 
     @keyframes float-down {
@@ -236,7 +255,6 @@
     
     .img-large { grid-column: span 12; aspect-ratio: 16/9; }
     .img-half { grid-column: span 6; aspect-ratio: 4/5; } 
-    .img-third { grid-column: span 4; aspect-ratio: 1/1; }
 
     /* Descriptions under images */
     .poster-description {
@@ -259,22 +277,103 @@
       margin-bottom: 10px;
     }
 
-    .poster-description p {
-      font-family: 'Futura Std', 'Futura', sans-serif;
-      font-size: 0.95rem;
-      color: var(--off-white);
-      opacity: 0.9;
-      line-height: 1.6;
+    /* --- Floating Space Mockups (5-Item Cluster) --- */
+    @keyframes continuous-float {
+      0%, 100% { transform: translateY(0) rotate(var(--rot, 0deg)); }
+      50% { transform: translateY(-20px) rotate(calc(var(--rot, 0deg) + 2deg)); }
     }
 
-    @media (max-width: 900px) {
-      .soluna-branding h1 { font-size: 3rem; }
-      .img-half, .img-third { grid-column: span 12; aspect-ratio: flex; }
-      .poster-description { grid-column: span 12; padding-bottom: 60px;}
+    .scatter-wrapper {
+      position: relative;
+      animation: float-down 2s ease-out forwards;
+      opacity: 0;
+      animation-delay: calc(0.1s * var(--delay, 1));
+      will-change: transform, opacity;
+      z-index: 10;
+    }
+
+    .scatter-wrapper img {
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+      animation: continuous-float 6s ease-in-out infinite;
+      animation-delay: calc(0.2s * var(--delay, 1)); 
+    }
+
+    .pos-bottle    { grid-column: 1 / 6; top: 0; z-index: 12; --rot: -3deg; }
+    .pos-white-mug { grid-column: 2 / 7; top: 0; z-index: 11; --rot: 5deg; }
+    .pos-biz       { grid-column: 4 / 10; top: 120px; z-index: 15; --rot: 0deg; margin-bottom: 100px; }
+    .pos-cup       { grid-column: 1 / 6; top: 240px; z-index: 14; --rot: 4deg; margin-bottom: 120px; }
+    .pos-black-mug { grid-column: 7 / 12; top: 0; z-index: 13; --rot: -4deg; }
+
+
+/* --- Interactive Snowboards (Stacked & Oversized) --- */
+    .board-section-title {
+      grid-column: span 12;
+      text-align: center;
+      padding: 60px 0 40px 0;
+      animation: float-down 2s ease-out forwards;
+      opacity: 0;
+    }
+    
+    .board-section-title h3 {
+      font-size: 2.5rem;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: var(--accent-yellow);
+      margin-bottom: 10px;
+    }
+
+    /* --- Interactive Snowboards (Tightened) --- */
+    .flip-card {
+      grid-column: span 12;
+      height: 1400px;
+      perspective: 1500px;
+      animation: float-down 2s ease-out forwards;
+      opacity: 0;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: -600px; /* Further reduced to pull up */
+      margin-top: -300px;   /* Added to close the gap to the mugs */
+    }
+
+    .flip-card-inner {
+      position: relative;
+      width: 130%; /* Increased width to fill more than half the screen */
+      height: 100%;
+      text-align: center;
+      transition: transform 2s cubic-bezier(0.4, 0, 0.2, 1);
+      transform-style: preserve-3d;
+    }
+
+    .flip-card:hover .flip-card-inner {
+      transform: rotateY(180deg) scale(1.02); /* Slight scale to prevent clipping */
+    }
+
+    .flip-card-front, .flip-card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+    }
+
+    .flip-card-back {
+      transform: rotateY(180deg);
+    }
+
+    .flip-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 20px 40px rgba(0,0,0,0.7)); 
     }
   </style>
 </head>
 <body class="night-mode">
+  
 
   <div class="night-bg"></div>
   <div class="noise-overlay"></div>
@@ -319,7 +418,6 @@
         <img src="Nighttime.jpg" alt="Soluna Nighttime Concept" class="img-half" style="--delay: 1; aspect-ratio: auto;">
         <img src="Daytime.jpg" alt="Soluna Daytime Concept" class="img-half" style="--delay: 2; aspect-ratio: auto;">
         
-
         <div class="poster-description" style="--delay: 1.5;">
           <h3>Midnight Ascent</h3>
         </div>
@@ -330,11 +428,31 @@
         <img src="Soluna/NighttimeMockUp.jpg" alt="Nighttime Poster Mockup" class="img-half" style="--delay: 3;">
         <img src="Soluna/DayTimeMockUp.jpg" alt="Daytime Poster Mockup" class="img-half" style="--delay: 4;">
         
-        <img src="Soluna/BusinessCardMockUp.png" alt="Soluna Business Cards" class="img-large" style="--delay: 5;">
+        <div class="scatter-wrapper pos-white-mug" style="--delay: 6;">
+          <img src="Soluna/WhiteMugMockUp.png" alt="White Soluna Mug">
+        </div>
 
-        <img src="Soluna/WhiteMugMockUp.png" alt="White Soluna Mug" class="img-third" style="--delay: 6;">
-        <img src="Soluna/BlackMugMockUp.png" alt="Black Soluna Mug" class="img-third" style="--delay: 7;">
-        <img src="Soluna/SolunaToteMockUp.png" alt="Soluna Tote Bag" class="img-third" style="--delay: 8;">
+        <div class="scatter-wrapper pos-black-mug" style="--delay: 9;">
+          <img src="Soluna/BlackMugMockUp.png" alt="Black Soluna Mug">
+        </div>
+        
+        <div class="scatter-wrapper pos-biz" style="--delay: 7;">
+          <img src="Soluna/BusinessCardMockUp.png" alt="Soluna Business Cards">
+        </div>
+
+        <div class="flip-card" style="--delay: 11;">
+          <div class="flip-card-inner">
+            <div class="flip-card-front"><img src="Soluna/DTBF.png" alt="Daytime Snowboard Front"></div>
+            <div class="flip-card-back"><img src="Soluna/DTBB.png" alt="Daytime Snowboard Back"></div>
+          </div>
+        </div>
+
+        <div class="flip-card" style="--delay: 12;">
+          <div class="flip-card-inner">
+            <div class="flip-card-front"><img src="Soluna/NTBF.png" alt="Nighttime Snowboard Front"></div>
+            <div class="flip-card-back"><img src="Soluna/NTBB.png" alt="Nighttime Snowboard Back"></div>
+          </div>
+        </div>
 
       </section>
     </main>

@@ -59,8 +59,8 @@
 
     /* Gentler twinkle animation */
     @keyframes twinkle {
-      0% { opacity: 0.15; transform: scale(0.9); }
-      100% { opacity: 0.6; transform: scale(1.1); box-shadow: 0 0 8px 2px rgba(245, 232, 166, 0.3); }
+      0% { opacity: 1; transform: scale(0.9); }
+      100% { opacity: 2; transform: scale(1.1); box-shadow: 0 0 8px 2px rgba(245, 232, 166, 0.3); }
     }
 
     /* --- Layout & Nav --- */
@@ -143,61 +143,61 @@
       will-change: transform, opacity;
     }
     .poster-description {
-    grid-column: span 6;
-    padding: 15px 10px 40px 10px;
-    text-align: center; 
-    animation: float-down 2s ease-out forwards;
-    opacity: 0;
-    animation-delay: calc(0.1s * var(--delay, 1));
-  }
-   .intro-text {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 1rem;
-  padding-bottom: 15px; /* Adds space between the text and the line */
-  margin-bottom: 40px;
-  color: var(--zb1-blue);
-   }
+      grid-column: span 6;
+      padding: 15px 10px 40px 10px;
+      text-align: center; 
+      animation: float-down 2s ease-out forwards;
+      opacity: 0;
+      animation-delay: calc(0.1s * var(--delay, 1));
+    }
+    .intro-text {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1rem;
+      padding-bottom: 15px; /* Adds space between the text and the line */
+      margin-bottom: 40px;
+      color: var(--zb1-blue);
+    }
 
-  .poster-description h3 {
-    font-family: 'Orbitron', sans-serif;
-    font-weight: 700;
-    color: var(--zb1-blue);
-    font-size: 1.1rem;
-    margin-bottom: 8px;
-  }
+    .poster-description h3 {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      color: var(--zb1-blue);
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+    }
 
-  .poster-description p {
-    font-family: 'Orbitron', sans-serif;
-    font-weight: 400;
-    font-size: 0.85rem;
-    color: var(--off-white);
-    opacity: 0.8;
-    line-height: 1.5;
-  }
+    .poster-description p {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 400;
+      font-size: 0.85rem;
+      color: var(--off-white);
+      opacity: 0.8;
+      line-height: 1.5;
+    }
 
-  .section-label {
-    grid-column: span 12;
-    text-align: center;
-    margin: 60px 0 20px 0;
-    border-top: 1px solid rgba(202, 227, 247, 0.1);
-    padding-top: 40px;
-    animation: float-down 2s ease-out forwards;
-    opacity: 0;
-  }
+    .section-label {
+      grid-column: span 12;
+      text-align: center;
+      margin: 60px 0 20px 0;
+      border-top: 1px solid rgba(202, 227, 247, 0.1);
+      padding-top: 40px;
+      animation: float-down 2s ease-out forwards;
+      opacity: 0;
+    }
 
-  /* Using the Orbitron font for the main section divider to match your main title */
-  .section-label h2 {
-    font-family: 'Orbitron', sans-serif;
-    font-weight: 700;
-    color: var(--zb1-blue);
-    letter-spacing: 4px;
-    font-size: 1.2rem;
-    text-transform: uppercase;
-  }
-  
-  .section-label p {
-    font-family: 'Orbitron', sans-serif;
-  }
+    /* Using the Orbitron font for the main section divider to match your main title */
+    .section-label h2 {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      color: var(--zb1-blue);
+      letter-spacing: 4px;
+      font-size: 1.2rem;
+      text-transform: uppercase;
+    }
+    
+    .section-label p {
+      font-family: 'Orbitron', sans-serif;
+    }
     .img-large { grid-column: span 12; aspect-ratio: 16/9; }
     .img-half { grid-column: span 6; aspect-ratio: 1/1; } 
     .img-third { grid-column: span 4; aspect-ratio: 3/4; }
@@ -230,7 +230,12 @@
     .pos-1 { grid-column: 1 / 8; top: 0; z-index: 12; --rot: -4deg; }   /* Shirt/Jacket */
     .pos-2 { grid-column: 7 / 12; top: 80px; z-index: 11; --rot: 7deg; } /* Cap */
     .pos-3 { grid-column: 2 / 9; top: -60px; z-index: 13; --rot: -2deg; } /* Tote Bag */
-    .pos-4 { grid-column: 8 / 13; top: 40px; z-index: 14; --rot: 5deg; margin-bottom: 100px; } /* Lanyard */
+    .pos-4 { grid-column: 8 / 13; top: 40px; z-index: 14; --rot: 5deg; margin-bottom: 20px; } /* Lanyard / Ticket - reduced bottom margin */
+    
+    /* Adjusted Stagger Positions to bring new additions closer to the rest */
+    .pos-5 { grid-column: 1 / 6; top: -140px; z-index: 11; --rot: -6deg; } /* Paper Cup */
+    .pos-6 { grid-column: 5 / 9; top: -90px; z-index: 12; --rot: 3deg; }   /* Water Bottle (Light) */
+    .pos-7 { grid-column: 8 / 13; top: -160px; z-index: 10; --rot: -3deg; margin-bottom: 60px; } /* Water Bottle (Dark) */
 
     /* --- 3D Flip Cards (Photocards) --- */
     .flip-card {
@@ -266,10 +271,27 @@
     @media (max-width: 900px) {
       .zb1-branding h1 { font-size: 2.5rem; }
       .img-half, .img-third { grid-column: span 12; }
-      .pos-1, .pos-2, .pos-3, .pos-4 { grid-column: span 12; top: 0; margin-bottom: 40px; }
+      .pos-1, .pos-2, .pos-3, .pos-4, .pos-5, .pos-6, .pos-7 { grid-column: span 12; top: 0; margin-bottom: 40px; }
+    }
+/* --- Tour Ticket Centered & Contained --- */
+    .ticket-container {
+      grid-column: span 12;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 40px 0;
     }
 
-
+    .ticket-container img {
+      width: 100%;
+      max-width: 1100px; /* Restricts it from getting too large */
+      height: auto;
+      object-fit: contain;
+      border-radius: 8px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+      animation: float-down 2s ease-out forwards;
+      opacity: 0;
+    }
   </style>
 </head>
 <body>
@@ -304,10 +326,10 @@
           <p class="subtitle">USA World Tour 2026. Visual Direction, Poster Design, & Promotional Assets 
           </p>
           <p class="intro-text">
-  In this project, I explored concept branding, and visual direction for ZEROBASEONE's 1st USA World Tour.<br> 
-  This project reflects the type of creative direction that I want to possibly pursue in the future within <br> 
-  the entertainment and music industry.
-</p>
+            In this project, I explored concept branding and visual direction for ZEROBASEONE’s first U.S. world tour, <br>
+            imagining what it could look like since the group has yet to tour in the United States. <br> 
+            This work reflects the type of creative direction I hope to pursue in the future within the entertainment and music industry.
+          </p>
 
           <div class="tour-dates">
             <div class="date-item">
@@ -356,27 +378,35 @@
 
       <section class="image-grid">
   
-  <img src="ZB1 tour poster 2.jpg" alt="Tour Poster 2" class="standard img-half" style="--delay: 1;">
-  <img src="ZB1 tour poster 1.jpg" alt="Tour Poster 1" class="standard img-half" style="--delay: 2;">
+        <img src="ZB1 tour poster 2.jpg" alt="Tour Poster 2" class="standard img-half" style="--delay: 1;">
+        <img src="ZB1 tour poster 1.jpg" alt="Tour Poster 1" class="standard img-half" style="--delay: 2;">
 
-  <div class="poster-description" style="--delay: 1.5;">
-    <h3>Primary Visual</h3>
-    <p>The main tour visual designed for digital social platforms and outdoor terminal displays.</p>
-  </div>
-    
+        <div class="poster-description" style="--delay: 1.5;">
+          <h3>Primary Visual</h3>
+          <p>The main tour visual designed for digital social platforms and outdoor terminal displays.</p>
+        </div>
+          
 
-  <div class="poster-description" style="--delay: 2.5;">
-    <h3>Secondary Visual</h3>
-    <p>This is an information based poster utilizing typography showing the details of the tour-dates.</p>
-  </div>
+        <div class="poster-description" style="--delay: 2.5;">
+          <h3>Secondary Visual</h3>
+          <p>This is an information based poster utilizing typography showing the details of the tour-dates.</p>
+        </div>
+
+        <div class="ticket-container">
+          <img src="ZB1 tour ticket.jpg" alt="ZB1 USA Tour Ticket Mockup" style="--delay: 5;">
+        </div>
+
         <img src="Mockups/poster2mock.jpg" alt="Poster 2 Mockup" class="standard img-half" style="--delay: 4;">
         <img src="Mockups/poster1mockup-web.jpg" alt="Poster 1 Mockup" class="standard img-half" style="--delay: 3;">
         
-
         <div class="scatter-wrapper pos-1" style="--delay: 3;">
           <img src="Mockups/shirtnobgmockup.png" alt="Tour Shirt">
         </div>
         
+        <div class="scatter-wrapper pos-4" style="--delay: 3;">
+          <img src="Mockups/Ticket Mockup.png" alt="Ticket">
+        </div>
+
         <div class="scatter-wrapper pos-2" style="--delay: 4;">
           <img src="Mockups/Zb1CAPMOCKUP.png" alt="Tour Cap">
         </div>
@@ -388,10 +418,23 @@
         <div class="scatter-wrapper pos-4" style="--delay: 6;">
           <img src="Mockups/Free Corporate iD Card Holder with Lanyard Mockup.png" alt="VIP Lanyard">
         </div>
+
+        <div class="scatter-wrapper pos-4" style="--delay: 6.5;">
+          <img src="Mockups/Paper Cup MockUp PSD.png" alt="Tour Paper Cup">
+        </div>
+
+        <div class="scatter-wrapper pos-5" style="--delay: 7;">
+          <img src="Mockups/Water Bottle MockUp.png" alt="Tour Water Bottle Light">
+        </div>
+
+        <div class="scatter-wrapper pos-4" style="--delay: 7.5;">
+          <img src="Mockups/Water Bottle MockUp1.png" alt="Tour Bottle Dark">
+        </div>
+
         <div class="section-label" style="--delay: 8.5;">
-            <h2>Exclusive Collectibles</h2>
-            <p style="font-size: 0.7rem; opacity: 0.5; margin-top: 5px;">Limited Edition Photocard Set</p>
-          </div>
+          <h2>Collectible Trading Cards</h2>
+          <p style="font-size: 0.7rem; opacity: 0.5; margin-top: 5px;">Limited Edition Photocard Set</p>
+        </div>
 
         <div class="flip-card img-third" style="--delay: 7;">
           <div class="flip-card-inner">
