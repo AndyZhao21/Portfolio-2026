@@ -290,7 +290,13 @@
     .pos-biz       { grid-column: 4 / 10; top: 120px; z-index: 15; --rot: 0deg; margin-bottom: 100px; }
     .pos-black-mug { grid-column: 7 / 12; top: 0; z-index: 13; --rot: -4deg; }
 
-    /* --- Interactive Snowboards --- */
+    /* --- Automatic Flip Animation for Snowboards --- */
+    @keyframes snowboardFlip {
+      0%, 35% { transform: rotateY(0deg); }      /* Stay on front */
+      50%, 85% { transform: rotateY(180deg); }    /* Stay on back */
+      100% { transform: rotateY(360deg); }        /* Complete rotation */
+    }
+
     .flip-card {
       grid-column: span 12;
       height: 1400px;
@@ -312,10 +318,8 @@
       text-align: center;
       transition: transform 2s cubic-bezier(0.4, 0, 0.2, 1);
       transform-style: preserve-3d;
-    }
-
-    .flip-card:hover .flip-card-inner {
-      transform: rotateY(180deg) scale(1.02);
+      /* Applied automatic flip animation */
+      animation: snowboardFlip 8s infinite ease-in-out;
     }
 
     .flip-card-front, .flip-card-back {
@@ -421,7 +425,7 @@
         </div>
 
         <div class="flip-card" style="--delay: 12;">
-          <div class="flip-card-inner">
+          <div class="flip-card-inner" style="animation-delay: 2s;">
             <div class="flip-card-front"><img src="Soluna/NTBF.png" alt="Nighttime Snowboard Front"></div>
             <div class="flip-card-back"><img src="Soluna/NTBB.png" alt="Nighttime Snowboard Back"></div>
           </div>
