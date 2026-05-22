@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fishion Rebrand | Andy Zhao</title>
+  
+  <style>
+    @font-face {
+      font-family: 'Clarendon';
+      src: url(Clarendon\ Regular.otf);
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    :root {
+      --fishion-deep: #0a1a1a;
+      --fishion-core: #132d2d;
+      --fishion-sea: #1d4242;
+      --fishion-glow: #2c5c5c;
+      --fishion-accent: #d4af37;
+      --off-white: #FEFEFE;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Clarendon', 'Clarendon BT', 'URW Clarendon', 'Century Schoolbook', serif;
+      color: var(--off-white);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+      background: linear-gradient(
+        to bottom,
+        var(--fishion-deep) 0%,
+        var(--fishion-core) 35%,
+        var(--fishion-sea) 70%,
+        var(--fishion-glow) 100%
+      );
+      background-attachment: fixed;
+      min-height: 100vh;
+    }
+
+    .noise-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.03;
+      background-image: url('data:image/svg+xml;utf8,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)"/%3E%3C/svg%3E');
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 5%;
+      position: relative;
+      z-index: 10;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 40px 0;
+      font-size: 0.9rem;
+      letter-spacing: 1px;
+      text-transform: lowercase;
+    }
+
+    .logo a { color: var(--off-white); text-decoration: none; font-weight: bold; }
+
+    .nav-links a { 
+      margin-left: 40px; 
+      color: var(--off-white); 
+      text-decoration: none;
+      transition: opacity 0.3s ease;
+    }
+    .nav-links a:hover { opacity: 0.6; }
+
+    .project-header { padding: 10vh 0 5vh 0; }
+    
+    .back-link {
+      display: inline-block;
+      color: var(--fishion-accent);
+      text-decoration: none;
+      margin-bottom: 40px;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .project-title h1 {
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      font-weight: normal;
+      line-height: 1.1;
+      margin-bottom: 20px;
+    }
+
+    .subtitle {
+      font-size: 1.3rem;
+      color: #FEFEFE;
+      margin-bottom: 40px;
+      display: block;
+    }
+
+    .intro-text {
+      max-width: 850px;
+      font-size: 1.2rem;
+      color: rgba(254, 254, 254, 0.8);
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      padding-bottom: 40px;
+      margin-bottom: 60px;
+    }
+
+    .image-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 24px;
+      padding-bottom: 100px;
+    }
+
+    /* Tight Grid for grouped images */
+    .tight-grid {
+      grid-column: span 12;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    /* Animate containers */
+    .image-grid > div, .tight-grid > div {
+      opacity: 0;
+      animation: fadeInUp 1.5s ease forwards;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .image-grid img, .tight-grid img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain; 
+      border-radius: 4px;
+    }
+
+    .img-full { grid-column: span 12; aspect-ratio: 16/8; }
+    .img-inner { aspect-ratio: 1/1; } 
+    .img-tall { grid-column: span 12; aspect-ratio: 16/20; }
+
+    /* --- Flip Card Logic --- */
+    .flip-card {
+      perspective: 1500px;
+      cursor: pointer;
+    }
+
+    .flip-card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
+      transform-style: preserve-3d;
+    }
+
+    .flip-card:hover .flip-card-inner {
+      transform: rotateY(180deg);
+    }
+
+    .flip-card-front, .flip-card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      border-radius: 4px;
+    }
+
+    .flip-card-back {
+      transform: rotateY(180deg);
+    }
+
+    footer {
+      padding: 60px 0;
+      text-align: center;
+      font-size: 0.9rem;
+      color: rgba(254, 254, 254, 0.4);
+      border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    @media (max-width: 768px) {
+      .img-full, .img-tall { grid-column: span 12; }
+      .tight-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="noise-overlay"></div>
+
+  <div class="container">
+    <nav>
+      <div class="nav-brand">
+        <div class="logo"><a href="index.html">andy zhao</a></div>
+      </div>
+      <div class="nav-links">
+        <a href="index.html#work">projects</a>
+        <a href="index.html#about">about</a>
+      </div>
+    </nav>
+
+    <main>
+      <section class="project-header">
+        <a href="index.html" class="back-link">← Back to Projects</a>
+        <div class="project-title">
+          <h1>Fishion Rebrand</h1>
+          <span class="subtitle">Brand Identity & Visual Direction</span>
+          <p class="intro-text">
+            Since 1989, Fishion Therapy Center has been located in the heart of Chinatown, <br> on the 2nd floor of the On Leong Chinese Merchants Association building. 
+            <br> In this rebranding, I want to incorporate the buildings stunning visuals to make Fishion a brand that can be instantly recognized for the long term and first time customers.
+          </p>
+        </div>
+      </section>
+
+      <section class="image-grid">
+        
+        <div class="flip-card img-full" style="animation-delay: 0.2s;">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <img src="Fishion/Fishion Card.jpg" alt="Fishion Business Card Front">
+            </div>
+            <div class="flip-card-back">
+              <img src="Fishion/Fishion Back Card.jpg" alt="Fishion Business Card Back">
+            </div>
+          </div>
+        </div>
+
+        <div class="img-full" style="animation-delay: 0.4s;">
+          <img src="Fishion/Fishion BC mockup.jpg" alt="Fishion Business Card Mockup">
+        </div>
+
+        <div class="img-full" style="animation-delay: 0.6s;">
+          <img src="Fishion/Fishion Banner.jpg" alt="Fishion Brand Banner">
+        </div>
+
+        <div class="tight-grid" style="animation-delay: 0.8s;">
+          <div class="img-inner">
+            <img src="Fishion/Fishion Entrance.jpg" alt="Fishion Entrance">
+          </div>
+          <div class="img-inner">
+            <img src="Fishion/Fishion Entrance MC.jpg" alt="Fishion Entrance MC">
+          </div>
+        </div>
+
+        <div class="tight-grid" style="animation-delay: 1.0s;">
+          <div class="img-inner">
+            <img src="Fishion/Fishion Gift Card.jpg" alt="Fishion Gift Card">
+          </div>
+          <div class="img-inner">
+            <img src="Fishion/Fishion Gift Card MC.jpg" alt="Fishion Gift Card MC">
+          </div>
+        </div>
+
+        <div class="img-tall" style="animation-delay: 1.2s;">
+          <img src="Fishion/Fishion Price List.jpg" alt="Fishion Price List">
+        </div>
+
+      </section>
+    </main>
+
+    <footer>
+      &copy; 2026 Andy Zhao
+    </footer>
+  </div>
+
+</body>
+</html>

@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Andy Zhao | Calm Nostalgia</title>
   <style>
-    
     :root {
       /* Base Day-to-Night Palette */
       --sky-day: #a2c5d6;     
@@ -14,13 +13,15 @@
       --sky-evening: #1c315f; 
       --deep-background: #020305; 
       
-      /* Pure Night Palette (Sharyap Inspired) */
+      /* Pure Night Palette */
       --night-dusk: #0f172a;
       --night-void: #020305;
 
       --steel-blue: #8B9EB2;      
       --accent-yellow: #F5E8A6;   
       --off-white: #FEFEFE;       
+
+      --star-hover: #F5E8A6;
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -39,13 +40,10 @@
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
       overflow-x: hidden;
-      /* Smooth color transitions for elements changing in night mode */
       transition: color 0.8s ease;
     }
     
     /* --- Background Layers --- */
-    
-    /* Dedicated smooth-fading night background */
     .night-bg {
       position: fixed;
       top: 0; left: 0; width: 100vw; height: 100vh;
@@ -56,10 +54,7 @@
       transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    /* Toggled State */
-    body.night-mode .night-bg {
-      opacity: 1;
-    }
+    body.night-mode .night-bg { opacity: 1; }
 
     .noise-overlay {
       position: fixed;
@@ -70,7 +65,6 @@
       background-image: url('data:image/svg+xml;utf8,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)"/%3E%3C/svg%3E');
     }
 
-    /* Fixed Image at Top */
     .hero-image-wrapper {
       position: absolute;
       top: 0; left: 0; width: 100%; height: 90vh;
@@ -86,49 +80,87 @@
       transition: opacity 1.2s ease, filter 1.2s ease;
     }
 
-    /* Toggled State: Darken and desaturate the hero image for night mode */
     body.night-mode .hero-image {
       opacity: 0.2;
       filter: grayscale(60%) brightness(0.6);
     }
 
-    .star-field {
+    /* --- Scroll Progress --- */
+    .scroll-progress {
       position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      z-index: -2;
+      top: 0; left: 0;
+      width: 100%; height: 3px;
+      z-index: 10000;
       pointer-events: none;
-      opacity: 0; 
-      will-change: opacity;
-      transition: opacity 0.5s ease;
     }
 
-    /* Toggled State: Force stars to show */
-    body.night-mode .star-field {
-      opacity: 2 !important;
+    .scroll-progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent-yellow), var(--sky-sunset));
     }
 
-    .star {
-      position: absolute;
-      background-color: var(--accent-yellow);
-      border-radius: 50%;
-      /* Increased the base glow slightly so it's always somewhat visible */
-      box-shadow: 0 0 6px 2px rgba(245, 232, 166, 0.3);
-      animation: twinkle linear infinite alternate;
+    body.night-mode .scroll-progress-bar {
+      background: linear-gradient(90deg, var(--star-hover), rgba(127, 175, 238, 0.3));
     }
 
-    @keyframes twinkle {
-      /* Bumped the lowest opacity slightly so they don't disappear entirely */
-      0% { 
-        opacity: 0.3; 
-        transform: scale(0.9); 
-      }
-      /* Pushed max opacity to 1.0 and intensified the glow radius and color */
-      100% { 
-        opacity: 1; 
-        transform: scale(1.15); 
-        box-shadow: 0 0 16px 4px rgba(245, 232, 166, 0.7); 
-      }
+    .scroll-icon {
+      position: fixed;
+      top: 8px;
+      z-index: 10001;
+      font-size: 14px;
+      pointer-events: none;
+      filter: drop-shadow(0 0 4px rgba(245, 232, 166, 0.6));
     }
+
+    body.night-mode .scroll-icon {
+      filter: drop-shadow(0 0 6px rgba(30, 138, 240, 0.6));
+    }
+
+/* Update your .star-field and .star styles with these */
+.star-field {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  z-index: -2;
+  pointer-events: none;
+  opacity: 0; 
+  will-change: opacity;
+  transition: opacity 0.5s ease;
+}
+
+body.night-mode .star-field {
+  opacity: 1 !important;
+  pointer-events: auto; /* This allows you to hover over them */
+  z-index: 5; /* This brings them in front of the content */
+}
+
+.star {
+  position: absolute;
+  background-color: var(--accent-yellow);
+  border-radius: 50%;
+  box-shadow: 0 0 10px 4px rgba(245, 232, 166, 0.5);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+  animation: twinkle linear infinite alternate;
+}
+
+@keyframes twinkle {
+  0% { 
+    opacity: 0.4; 
+    box-shadow: 0 0 8px 3px rgba(245, 232, 166, 0.4);
+  }
+  100% { 
+    opacity: 1; 
+    box-shadow: 0 0 22px 6px rgba(245, 232, 166, 0.85); 
+  }
+}
+
+.star:hover {
+  background-color: var(--star-hover) !important;
+  box-shadow: 0 0 28px 12px #F5E8A6 !important;
+  transform: scale(2.5);
+  animation-play-state: paused;
+  cursor: default;
+}
 
     /* --- Layout & Typography --- */
     .container {
@@ -149,20 +181,14 @@
       text-shadow: 0 2px 8px rgba(0,0,0,0.15);
     }
 
-    /* Group Logo and Button together */
     .nav-brand {
       display: flex;
       align-items: center;
       gap: 20px;
     }
 
-    .logo a { 
-      color: var(--off-white); 
-      text-decoration: none; 
-      font-weight: 500;
-    }
+    .logo a { color: var(--off-white); text-decoration: none; font-weight: 500; }
 
-    /* Night Mode Toggle Button */
     .theme-toggle {
       background: transparent;
       border: 1px solid rgba(254, 254, 254, 0.3);
@@ -183,14 +209,12 @@
       background: rgba(245, 232, 166, 0.1);
       border-color: var(--accent-yellow);
       transform: scale(1.05) rotate(15deg);
-      box-shadow: 0 0 10px rgba(245, 232, 166, 0.2);
     }
 
     body.night-mode .theme-toggle {
       background: var(--accent-yellow);
       color: var(--deep-background);
       border-color: var(--accent-yellow);
-      box-shadow: 0 0 15px rgba(245, 232, 166, 0.4);
     }
 
     .nav-links a { 
@@ -217,18 +241,9 @@
       line-height: 1.1;
       letter-spacing: -1px;
       margin-bottom: 20px;
-      text-shadow: 0 4px 15px rgba(0,0,0,0.15); 
     }
 
-    .hero-text p {
-      font-size: 1.1rem;
-      max-width: 500px;
-      color: var(--off-white);
-      opacity: 0.9;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.2);
-    }
-
-    /* --- Selected Works Section --- */
+    /* --- Selected Works --- */
     .works {
       padding: 10vh 0;
       position: relative;
@@ -251,13 +266,7 @@
       margin-bottom: 120px;
     }
 
-    .project-row:nth-child(even) {
-      grid-template-columns: 1fr 1fr;
-    }
-
-    .project-row:nth-child(even) .image-wrapper {
-      order: 2;
-    }
+    .project-row:nth-child(even) .image-wrapper { order: 2; }
 
     .image-wrapper {
       display: block;
@@ -279,9 +288,7 @@
       transition: transform 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
 
-    .project-info {
-      padding: 0 40px;
-    }
+    .project-info { padding: 0 40px; }
 
     .micro-text {
       display: block;
@@ -291,22 +298,11 @@
       color: var(--steel-blue);
     }
 
-    .project-info h2 {
-      font-size: 2.5rem;
-      font-weight: 500;
-      line-height: 1.1;
-      margin-bottom: 20px;
-    }
+    .project-info h2 { font-size: 2.5rem; font-weight: 500; margin-bottom: 20px; }
 
-    .project-info p {
-      font-size: 1rem;
-      color: var(--steel-blue);
-      margin-bottom: 30px;
-      max-width: 400px;
-    }
+    .project-info p { font-size: 1rem; color: var(--steel-blue); margin-bottom: 30px; max-width: 400px; }
 
     .project-info a {
-      font-size: 0.9rem;
       color: var(--accent-yellow);
       text-decoration: none;
       text-transform: uppercase;
@@ -315,10 +311,127 @@
       transition: border-bottom 0.3s ease;
     }
 
-    .project-info a:hover {
+    .project-info a:hover { border-bottom: 1px solid var(--accent-yellow); }
+
+    /* --- About & Contact Section --- */
+    .about {
+      padding: 15vh 0 10vh;
+      position: relative;
+      z-index: 10;
+      border-top: 1px solid rgba(254, 254, 254, 0.05);
+    }
+
+    .about-header {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 60px;
+      color: var(--accent-yellow);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+    }
+
+    .about-photo {
+      width: 100%;
+      height: 55vh;
+      object-fit: cover;
+      border-radius: 4px;
+      opacity: 0.9;
+    }
+
+    .about-content h2 {
+      font-size: 2.2rem;
+      font-weight: 400;
+      line-height: 1.2;
+      margin-bottom: 20px;
+    }
+
+    /* Contact Form Styles */
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+      margin-top: 30px;
+      max-width: 450px;
+    }
+
+    .contact-form input, 
+    .contact-form textarea {
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid rgba(254, 254, 254, 0.2);
+      color: var(--off-white);
+      padding: 12px 0;
+      font-family: inherit;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-bottom 0.4s ease;
+    }
+
+    .contact-form input::placeholder, 
+    .contact-form textarea::placeholder {
+      color: var(--steel-blue);
+      opacity: 0.6;
+      text-transform: lowercase;
+    }
+
+    .contact-form input:focus, 
+    .contact-form textarea:focus {
       border-bottom: 1px solid var(--accent-yellow);
     }
 
+    .contact-form textarea {
+      resize: none;
+    }
+
+    .contact-form button {
+      align-self: flex-start;
+      background: transparent;
+      border: 1px solid var(--accent-yellow);
+      color: var(--accent-yellow);
+      padding: 12px 35px;
+      cursor: pointer;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      margin-top: 15px;
+    }
+
+    .contact-form button:hover {
+      background: var(--accent-yellow);
+      color: var(--deep-background);
+      transform: translateY(-2px);
+    }
+
+    .about-contact {
+      margin-top: 30px;
+    }
+
+    .about-contact a {
+      color: var(--steel-blue);
+      text-decoration: none;
+      font-size: 20 rem;
+      letter-spacing: 1px;
+      opacity: 0.7;
+      transition: opacity 0.3s ease;
+    }
+
+    .about-contact a:hover { opacity: 1; }
+
+    /* --- Soluna Alpine Day/Night Toggle --- */
+    .soluna-day, .soluna-night {
+      transition: opacity 0.8s ease, transform 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    .soluna-night { opacity: 0; }
+    body.night-mode .soluna-night { opacity: 1; }
+    body.night-mode .soluna-day { opacity: 0; }
+    
     footer {
       padding: 60px 0;
       text-align: center;
@@ -327,41 +440,23 @@
       border-top: 1px solid rgba(254, 254, 254, 0.05);
     }
 
-/* --- Soluna Alpine Day/Night Image Toggle --- */
-    .soluna-day, .soluna-night {
-      /* Adds opacity to the existing transform transitions */
-      transition: opacity 0.8s ease, transform 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    }
-
-    /* By default (Day Mode), hide the night image */
-    .soluna-night {
-      opacity: 0; 
-    }
-
-    /* When Night Mode is active, show the night image and hide the day image */
-    body.night-mode .soluna-night {
-      opacity: 1; 
-    }
-
-    body.night-mode .soluna-day {
-      opacity: 0; 
-    }
-    
     @media (max-width: 900px) {
-      .project-row, .project-row:nth-child(even) {
-        grid-template-columns: 1fr;
-        gap: 30px;
-        margin-bottom: 80px;
-      }
+      .project-row, .project-row:nth-child(even) { grid-template-columns: 1fr; gap: 30px; margin-bottom: 80px; }
       .project-row:nth-child(even) .image-wrapper { order: 1; }
-      .project-info { padding: 0; }
       .image-wrapper { height: 50vh; }
+      .about-grid { grid-template-columns: 1fr; gap: 40px; }
+      .about-photo { height: 40vh; }
     }
   </style>
 </head>
 <body class="night-mode">
 
   <div class="night-bg"></div>
+
+  <div class="scroll-progress">
+    <div class="scroll-progress-bar" id="scroll-bar"></div>
+  </div>
+  <div class="scroll-icon" id="scroll-icon"></div>
 
   <div class="hero-image-wrapper">
     <img src="cloudbottom.png" alt="Sky" class="hero-image">
@@ -410,8 +505,7 @@
             <span class="micro-text">// VOL. 01 — [2026]</span>
             <h2>ZEROBASEONE<br>HERE & NOW</h2>
             <p>Visual direction, promotional assets, and merchandise design for ZB1's first USA tour.</p>
-            <a href="zb1.html">Explore
-            </a>
+            <a href="zb1.html">Explore</a>
           </div>
         </article>
 
@@ -424,7 +518,7 @@
             <span class="micro-text">// VOL. 02 — [2026]</span>
             <h2>SOLUNA<br>ALPINE</h2>
             <p>Brand identity rooted in the tranquility of high-altitude landscapes and deep snow.</p>
-            <a href="soluna.html">Explore </a>
+            <a href="soluna.html">Explore</a>
           </div>
         </article>
 
@@ -435,56 +529,103 @@
             <span class="micro-text">// VOL. 03 — [2026]</span>
             <h2>FISHION</h2>
             <p>NYC's Long-standing Choice for Holistic Treatments</p>
-            <a href="fishion.html">Explore </a>
+            <a href="fishion.html">Explore</a>
           </div>
         </article>
-
       </section>
     </main>
 
+    <section class="about" id="about">
+      <div class="about-header">About</div>
+      <div class="about-grid">
+        <img src="cloudbottom.png" alt="Andy Zhao" class="about-photo">
+        <div class="about-content">
+          <h2>Contact</h2>
+          
+          <form class="contact-form">
+            <input type="text" name="name" placeholder="name" required>
+            <input type="email" name="email" placeholder="email address" required>
+            <textarea name="message" placeholder="message" rows="4" required></textarea>
+            <button type="submit">Submit</button>
+          </form>
+
+          <div class="about-contact">
+            <a href="https://docs.google.com/document/d/15eHS6orLojsb1Xj9_-8Am7R7CJbvyk2L42jbAOGnwvk/edit?usp=sharing" target="_blank"> Link to my Resume</a> 
+          </div>
+        </div>
+      </div>
+    </section>
+
     <footer>
-      © 2026 Andy Zhao 
+      &copy; 2026 Andy Zhao 
     </footer>
   </div>
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
-      // 1. Theme Toggle Logic
+      
       const themeToggle = document.getElementById('theme-toggle');
-      // Set initial state to true!
+      const scrollIcon = document.getElementById('scroll-icon');
+      const scrollBar = document.getElementById('scroll-bar');
+      
       let isNightMode = true;
+      scrollIcon.textContent = '☾'; // Initial moon icon
 
+      // Locate this part of your script and update the loop count
+      const starField = document.querySelector('.star-field');
+      const starCount = 10; // Increased count for more stars
+
+      for (let i = 0; i < starCount; i++) {
+  const star = document.createElement('div');
+  star.className = 'star';
+  
+  // Random size between 1px and 3px
+  const size = Math.random() * 2 + 1;
+  star.style.width = `${size}px`;
+  star.style.height = `${size}px`;
+  
+  // Random position
+  star.style.top = `${Math.random() * 100}%`;
+  star.style.left = `${Math.random() * 100}%`;
+  
+  // Random twinkle speed
+  star.style.animationDuration = `${Math.random() * 3 + 2}s`;
+  star.style.animationDelay = `${Math.random() * 5}s`;
+  
+  starField.appendChild(star);
+}
+
+      // 1. Theme Toggle
       themeToggle.addEventListener('click', () => {
         isNightMode = !isNightMode;
         document.body.classList.toggle('night-mode');
-        // Update button icon dynamically
         themeToggle.innerHTML = isNightMode ? '✧' : '✦';
+        scrollIcon.textContent = isNightMode ? '☾' : '☼';
         
-        // If night mode is turned off, trigger scroll event to reset star fading
         if (!isNightMode) {
           window.dispatchEvent(new Event('scroll'));
         }
       });
 
-      // 2. Star Fade-In Day/Night Scroll Effect (Ignored if Night Mode is active via CSS !important)
-      const starField = document.querySelector('.star-field');
-      
+      // 2. Scroll Progress + Star Fade Logic
       window.addEventListener('scroll', () => {
-        if (isNightMode) return; // Let CSS handle it if manually toggled
-        
         const scrollY = window.scrollY;
         const maxScroll = document.body.scrollHeight - window.innerHeight;
         const scrollPercent = maxScroll > 0 ? scrollY / maxScroll : 0;
         
+        // Update top bar width and icon position
+        scrollBar.style.width = (scrollPercent * 100) + '%';
+        scrollIcon.style.left = (scrollPercent * 96 + 1) + '%';
+
+        // Star fading only applies in Day Mode
+        if (isNightMode) return;
         let starOpacity = (scrollPercent - 0.25) * 3.33; 
         starOpacity = Math.max(0, Math.min(starOpacity, 1)); 
-        
         starField.style.opacity = starOpacity;
       });
 
-      // 3. Parallax Script for project images
+      // 3. Parallax Script
       const parallaxImages = document.querySelectorAll(".parallax-img");
-
       const updateParallax = () => {
         parallaxImages.forEach(img => {
           const wrapper = img.parentElement;
